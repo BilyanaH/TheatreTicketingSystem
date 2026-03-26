@@ -6,6 +6,7 @@ import bg.uni.fmi.theatre.domain.Performance;
 import bg.uni.fmi.theatre.domain.Show;
 import bg.uni.fmi.theatre.repository.inmemory.InMemoryPerformanceRepository;
 import bg.uni.fmi.theatre.repository.inmemory.InMemoryShowRepository;
+import bg.uni.fmi.theatre.service.CatalogueService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
