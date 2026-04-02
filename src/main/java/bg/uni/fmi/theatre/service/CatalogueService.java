@@ -1,38 +1,37 @@
 package bg.uni.fmi.theatre.service;
 
-import bg.uni.fmi.theatre.domain.Genre;
-import bg.uni.fmi.theatre.domain.Performance;
-import bg.uni.fmi.theatre.domain.Show;
+import bg.uni.fmi.theatre.model.Genre;
+import bg.uni.fmi.theatre.model.Performance;
+import bg.uni.fmi.theatre.model.Show;
 import bg.uni.fmi.theatre.repository.PerformanceRepository;
 import bg.uni.fmi.theatre.repository.ShowRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CatalogueService {
-    private static final int DEFAULT_PAGE_SIZE = 10;
     private final ShowRepository showRepository;
     private final PerformanceRepository performanceRepository;
     private final int pageSize;
 
-    public CatalogueService(ShowRepository showRepository, PerformanceRepository performanceRepository, int pageSize) {
+    public CatalogueService(ShowRepository showRepository, PerformanceRepository performanceRepository,
+                            @Value("${catalogue.page-size}")int pageSize) {
         if (showRepository == null) {
             throw new IllegalArgumentException("ShowRepository cannot be null");
         }
         if (performanceRepository == null) {
             throw new IllegalArgumentException("PerformanceRepository cannot be null");
         }
-        if (pageSize < 0) {
+        if (pageSize <= 0) {
             throw new IllegalArgumentException("Page size must be positive number");
         }
         this.showRepository = showRepository;
         this.performanceRepository = performanceRepository;
         this.pageSize = pageSize;
-    }
-
-    public CatalogueService(ShowRepository showRepository, PerformanceRepository performanceRepository) {
-        this(showRepository, performanceRepository, DEFAULT_PAGE_SIZE);
     }
 
     public Show addShow(Show show) {

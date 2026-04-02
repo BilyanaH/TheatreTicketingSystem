@@ -1,4 +1,4 @@
-package bg.uni.fmi.theatre.domain;
+package bg.uni.fmi.theatre.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

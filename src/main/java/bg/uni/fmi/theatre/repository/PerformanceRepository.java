@@ -1,6 +1,6 @@
 package bg.uni.fmi.theatre.repository;
 
-import bg.uni.fmi.theatre.domain.Performance;
+import bg.uni.fmi.theatre.model.Performance;
 
 import java.util.List;
 import java.util.Optional;
