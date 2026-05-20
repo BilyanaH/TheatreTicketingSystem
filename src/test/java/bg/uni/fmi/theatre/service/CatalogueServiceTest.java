@@ -1,11 +1,11 @@
 package bg.uni.fmi.theatre.service;
 
-import bg.uni.fmi.theatre.model.AgeRating;
-import bg.uni.fmi.theatre.model.Genre;
+import bg.uni.fmi.theatre.vo.AgeRating;
+import bg.uni.fmi.theatre.vo.Genre;
 import bg.uni.fmi.theatre.model.Performance;
 import bg.uni.fmi.theatre.model.Show;
 import bg.uni.fmi.theatre.repository.inmemory.InMemoryPerformanceRepository;
-import bg.uni.fmi.theatre.repository.inmemory.InMemoryShowRepository;
+import bg.uni.fmi.theatre.repository.inmemory.TestInMemoryShowRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,13 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CatalogueServiceTest {
 
-    private InMemoryShowRepository showRepository;
+    private TestInMemoryShowRepository showRepository;
     private InMemoryPerformanceRepository performanceRepository;
     private CatalogueService catalogueService;
 
     @BeforeEach
     void setUp() {
-        showRepository = new InMemoryShowRepository();
+        showRepository = new TestInMemoryShowRepository();
         performanceRepository = new InMemoryPerformanceRepository();
         catalogueService = new CatalogueService(showRepository, performanceRepository, 5);
     }

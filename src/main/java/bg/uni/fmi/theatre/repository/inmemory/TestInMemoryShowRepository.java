@@ -2,6 +2,7 @@ package bg.uni.fmi.theatre.repository.inmemory;
 
 import bg.uni.fmi.theatre.model.Show;
 import bg.uni.fmi.theatre.repository.ShowRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -11,13 +12,14 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public class InMemoryShowRepository implements ShowRepository {
+@Profile("test")
+public class TestInMemoryShowRepository implements ShowRepository {
     private final Map<Long, Show> showMap = new HashMap<>();
     private final AtomicLong idSequence = new AtomicLong(1);
 
     @Override
     public Show save(Show show) {
-        showMap.put(show.id(), show);
+        showMap.put(show.getId(), show);
         return show;
     }
 

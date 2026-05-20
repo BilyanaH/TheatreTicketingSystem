@@ -1,26 +1,24 @@
 package bg.uni.fmi.theatre.model;
 
+import bg.uni.fmi.theatre.vo.PerformanceStatus;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public record Performance(Long id, Long showId, Long hallId, LocalDateTime startTime) {
-    public Performance {
-        if (id == null) {
-            throw new IllegalArgumentException("Id cannot be null");
-        }
-    }
+@Getter
+@Setter
+@EqualsAndHashCode
+public class Performance {
+    @NotNull
+    Long id;
+    Long showId;
+    Long hallId;
+    LocalDateTime startTime;
+    private PerformanceStatus status;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Performance performance)) return false;
-        return Objects.equals(id, performance.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

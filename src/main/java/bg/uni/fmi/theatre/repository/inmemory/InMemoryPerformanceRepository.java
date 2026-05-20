@@ -17,7 +17,7 @@ public class InMemoryPerformanceRepository implements PerformanceRepository {
 
     @Override
     public Performance save(Performance performance) {
-        performanceMap.put(performance.id(), performance);
+        performanceMap.put(performance.getId(), performance);
         return performance;
     }
 
@@ -34,7 +34,7 @@ public class InMemoryPerformanceRepository implements PerformanceRepository {
     @Override
     public List<Performance> findByShowId(Long showId) {
         return performanceMap.values().stream()
-                .filter(x -> x.showId().equals(showId))
+                .filter(x -> x.getShowId().equals(showId))
                 .toList();
     }
 

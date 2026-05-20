@@ -1,25 +1,18 @@
 package bg.uni.fmi.theatre.model;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import java.util.Objects;
 
-public record Hall(Long id, String name) {
-    public Hall {
-        if (id == null) {
-            throw new IllegalArgumentException("Id cannot be null");
-        }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Hall hall)) return false;
-        return Objects.equals(id, hall.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+@Getter
+@Setter
+@AllArgsConstructor
+@EqualsAndHashCode
+public class Hall {
+    @NotNull
+    Long id;
+    String name;
 }
