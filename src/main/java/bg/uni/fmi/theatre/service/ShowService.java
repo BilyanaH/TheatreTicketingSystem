@@ -1,15 +1,15 @@
 package bg.uni.fmi.theatre.service;
 
+import bg.uni.fmi.theatre.config.TheatreProperties;
 import bg.uni.fmi.theatre.dto.PageResponse;
 import bg.uni.fmi.theatre.dto.ShowRequest;
 import bg.uni.fmi.theatre.dto.ShowResponse;
 import bg.uni.fmi.theatre.exception.NotFoundException;
 import bg.uni.fmi.theatre.exception.ValidationException;
-import bg.uni.fmi.theatre.logger.AppLogger;
-import bg.uni.fmi.theatre.logger.TheatreProperties;
 import bg.uni.fmi.theatre.model.Show;
 import bg.uni.fmi.theatre.repository.ShowRepository;
 import bg.uni.fmi.theatre.vo.Genre;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -17,17 +17,15 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
+@Slf4j
 public class ShowService {
     private final ShowRepository showRepository;
-    private final AppLogger logger;
     private final int defaultPageSize;
     private final AtomicLong isSequence = new AtomicLong(100);
 
     public ShowService(ShowRepository showRepository,
-                       AppLogger logger,
                        TheatreProperties properties) {
         this.showRepository = showRepository;
-        this.logger = logger;
         this.defaultPageSize = properties.getDefaultPageSize();
     }
 
@@ -38,10 +36,10 @@ public class ShowService {
         Show show = new Show(isSequence.getAndIncrement(), request.getTitle(), request.getDescription(),
                 request.getGenre(), request.getDurationMinutes(), request.getAgeRating());
 
-        logger.debug("Adding show: " + show.getTitle());
+        log.debug("Adding show: " + show.getTitle());
         Show saved = showRepository.save(show);
 
-        logger.info("Show added: [" + saved.getId() + "] " + saved.getTitle());
+        log.info("Show added: [" + saved.getId() + "] " + saved.getTitle());
         return ShowResponse.from(saved);
     }
 
@@ -49,9 +47,9 @@ public class ShowService {
         if (id == null) {
             throw new ValidationException("Show id must not be null");
         }
-        logger.debug("Fetching show by id: " + id);
+        log.debug("Fetching show by id: " + id);
         return showRepository.findById(id).map(ShowResponse::from).orElseThrow(() -> {
-            logger.error("Show not found with id: " + id);
+            log.error("Show not found with id: " + id);
             return new NotFoundException("Show", id);
         });
     }
@@ -63,7 +61,7 @@ public class ShowService {
         if (size <= 0) {
             throw new ValidationException("Page size must be positive");
         }
-        logger.debug("Searching shows with title query: '" + titleQuery + "', genre: " + genre +
+        log.debug("Searching shows with title query: '" + titleQuery + "', genre: " + genre +
                 ", page: " + page + ", size: " + size);
 
         List<ShowResponse> allResults = showRepository.findAll().stream()
@@ -75,7 +73,7 @@ public class ShowService {
                 .toList();
 
         long totalElements = allResults.size();
-        logger.info("Search found " + totalElements + " shows matching criteria");
+        log.info("Search found " + totalElements + " shows matching criteria");
         int fromIndex = page * size;
         List<ShowResponse> pageContent = fromIndex >= totalElements ? List.of() :
                 allResults.subList(fromIndex, (int) Math.min(fromIndex + size, totalElements));
@@ -87,7 +85,7 @@ public class ShowService {
     }
 
     public List<ShowResponse> getAllShows() {
-        logger.trace("Fetching all shows");
+        log.trace("Fetching all shows");
         return showRepository.findAll().stream()
                 .sorted(Comparator.comparing(Show::getTitle))
                 .map(ShowResponse::from)
@@ -102,13 +100,13 @@ public class ShowService {
         existing.setGenre(request.getGenre());
         existing.setDurationMinutes(request.getDurationMinutes());
         existing.setAgeRating(request.getAgeRating());
-        logger.info("Show updated: [" + existing.getId() + "] " + existing.getTitle());
+        log.info("Show updated: [" + existing.getId() + "] " + existing.getTitle());
         return ShowResponse.from(showRepository.save(existing));
     }
 
     public  void deleteShow(Long id) {
         showRepository.findById(id).orElseThrow(() -> new NotFoundException("Show", id));
         showRepository.deleteById(id);
-        logger.info("Show deleted with id: " + id);
+        log.info("Show deleted with id: " + id);
     }
 }
