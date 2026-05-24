@@ -17,8 +17,8 @@ public class PerformanceResponse {
     public static PerformanceResponse from(Performance p) {
         PerformanceResponse r = new PerformanceResponse();
         r.id = p.getId();
-        r.showId = p.getShowId();
-        r.hallId = p.getHallId();
+        r.showId = p.getShow().getId();
+        r.hallId = p.getHall().getId();
         r.startTime = p.getStartTime();
         r.status = p.getStatus();
         return r;

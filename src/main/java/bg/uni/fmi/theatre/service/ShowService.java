@@ -33,7 +33,7 @@ public class ShowService {
         if (request == null) {
             throw new ValidationException("Show must not be null");
         }
-        Show show = new Show(isSequence.getAndIncrement(), request.getTitle(), request.getDescription(),
+        Show show = new Show(null, request.getTitle(), request.getDescription(),
                 request.getGenre(), request.getDurationMinutes(), request.getAgeRating());
 
         log.debug("Adding show: " + show.getTitle());

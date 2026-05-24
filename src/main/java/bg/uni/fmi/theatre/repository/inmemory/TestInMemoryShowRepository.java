@@ -11,9 +11,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Deprecated
 @Repository
 @Profile("test")
-public class TestInMemoryShowRepository implements ShowRepository {
+public abstract class TestInMemoryShowRepository implements ShowRepository {
     private final Map<Long, Show> showMap = new HashMap<>();
     private final AtomicLong idSequence = new AtomicLong(1);
 

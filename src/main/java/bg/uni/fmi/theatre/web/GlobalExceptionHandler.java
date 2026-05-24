@@ -4,6 +4,7 @@ import bg.uni.fmi.theatre.dto.ErrorResponse;
 import bg.uni.fmi.theatre.exception.NotFoundException;
 import bg.uni.fmi.theatre.exception.ValidationException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -34,6 +35,15 @@ public class GlobalExceptionHandler {
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining("; "));
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), message, request.getRequestURI());
+    }
+
+    @ExceptionHandler(OptimisticLockingFailureException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleOptimisticLock(OptimisticLockingFailureException ex,
+                                              HttpServletRequest request) {
+        return new ErrorResponse(409,
+                "The resource was modified by another request. Please retry.",
+                request.getRequestURI());
     }
 
     @ExceptionHandler(Exception.class)

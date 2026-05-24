@@ -10,8 +10,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Deprecated
 @Repository
-public class InMemoryPerformanceRepository implements PerformanceRepository {
+public abstract class InMemoryPerformanceRepository implements PerformanceRepository {
     private final Map<Long, Performance> performanceMap = new HashMap<>();
     private final AtomicLong isSequence = new AtomicLong(1);
 
@@ -34,7 +35,7 @@ public class InMemoryPerformanceRepository implements PerformanceRepository {
     @Override
     public List<Performance> findByShowId(Long showId) {
         return performanceMap.values().stream()
-                .filter(x -> x.getShowId().equals(showId))
+                .filter(x -> x.getId().equals(showId))
                 .toList();
     }
 

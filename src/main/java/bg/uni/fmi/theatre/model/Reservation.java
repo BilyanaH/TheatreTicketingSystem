@@ -1,6 +1,6 @@
 package bg.uni.fmi.theatre.model;
 
-import bg.uni.fmi.theatre.vo.PerformanceStatus;
+import bg.uni.fmi.theatre.vo.ReservationStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,41 +22,42 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "performance")
+@Table(name = "reservation", schema = "theatre")
 @Getter
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Performance {
+public class Reservation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "show_id", nullable = false)
-    private Show show;
+    @JoinColumn(name = "performance_id", nullable = false)
+    private Performance performance;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hall_id", nullable = false)
-    private Hall hall;
+    @Column(name = "seat_label", nullable = false, length = 20)
+    private String seatLabel;
 
-    @Column(name = "start_time", nullable = false)
-    private LocalDateTime startTime;
+    @Column(name = "customer_name", nullable = false, length = 100)
+    private String customerName;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PerformanceStatus status;
+    private ReservationStatus status;
 
-    public Performance(Show show, Hall hall, LocalDateTime startTime) {
-        if (show == null) throw new IllegalArgumentException("show is required");
-        if (hall == null) throw new IllegalArgumentException("hall is required");
-        if (startTime == null) throw new IllegalArgumentException("startTime is required");
-        this.show = show;
-        this.hall = hall;
-        this.startTime = startTime;
-        this.status = PerformanceStatus.SCHEDULED;
-    }
+    @Column(name = "reserved_at", nullable = false)
+    private LocalDateTime reservedAt;
 
     @Version
     private Long version;
+
+    public Reservation(Performance performance, String seatLabel, String customerName) {
+        this.performance = performance;
+        this.seatLabel = seatLabel;
+        this.customerName = customerName;
+        this.status = ReservationStatus.CONFIRMED;
+        this.reservedAt = LocalDateTime.now();
+    }
 }
